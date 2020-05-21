@@ -1,5 +1,5 @@
 TARGET = i2ctrl.elf
-LIB = periphery.a
+LIB = c-periphery/periphery.a
 CROSS_COMPILE = arm-linux-gnueabihf-
 SRC = i2ctrl.c
 INC = -I. -I./c-periphery/src
