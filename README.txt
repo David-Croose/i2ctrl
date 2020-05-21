@@ -1,1 +1,1 @@
-专门用来控制I2C的程序
+A c routine to read and write linux i2c device.
