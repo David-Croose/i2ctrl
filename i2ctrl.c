@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
+#include <string.h>
 
 #include "i2c.h"
 
@@ -20,7 +21,7 @@ int main(int argc, char *argv[])
     unsigned int addr;
     enum {WRITE, READ} rw;
     unsigned int len;
-    unsigned char *msg_data;
+    char *msg_data;
     struct i2c_msg msgs;
     int i;
 
@@ -66,13 +67,13 @@ int main(int argc, char *argv[])
 		len = strlen(argv[4]);
 	}
 
-    msg_data = (unsigned char *)calloc(len, sizeof(unsigned char));
+    msg_data = (char *)calloc(len, sizeof(char));
     if (!msg_data) {
     	printf("error: no enough memory for %dbytes\n", len);
     	return -5;
     }
     if (rw == WRITE)
-    	strncpy(msg_data, argv[4], sizeof(msg_data));
+    	strncpy(msg_data, argv[4], len);
 
     name = argv[1];
 
@@ -82,7 +83,7 @@ int main(int argc, char *argv[])
 	msgs.addr = addr;
 	msgs.flags = (rw == READ ? I2C_M_RD : 0);
 	msgs.len = len;
-	msgs.buf = msg_data;
+	msgs.buf = (unsigned char *)msg_data;
 
     i2c = i2c_new();
     if (i2c_open(i2c, name) < 0) {
@@ -90,7 +91,7 @@ int main(int argc, char *argv[])
         return -4;
     }
 
-    if (i2c_transfer(i2c, msgs, 1) < 0)
+    if (i2c_transfer(i2c, &msgs, 1) < 0)
         printf("error: i2c_transfer(): %s\n", i2c_errmsg(i2c));
     else {
     	if (rw == READ) {
