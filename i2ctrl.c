@@ -151,7 +151,7 @@ int main(int argc, char *argv[])
         return -4;
     }
 
-    if (i2c_transfer(i2c, 'i', &msgs, 1) < 0)
+    if (i2c_transfer(i2c, &msgs, 1) < 0)
         printf("error: i2c_transfer(): %s\n", i2c_errmsg(i2c));
     else {
     	if (rw == READ) {
